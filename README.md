@@ -6,4 +6,5 @@ Steps để chạy annaconda
 - conda env list : Liệt kê các môi trường
 
 Requirement:
-- pip install pandas, numpy, matplotlib, seaborn, scipy
+- pip install pandas numpy matplotlib seaborn scipy
+- pip install mlxtend
