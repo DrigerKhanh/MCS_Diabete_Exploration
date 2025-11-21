@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction App</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --light-gray: #f8f9fa;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .input-hint {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .high-risk {
+            background: #ffebee;
+            border: 1px solid var(--danger-color);
+            color: #c62828;
+        }
+
+        .medium-risk {
+            background: #fff3e0;
+            border: 1px solid var(--warning-color);
+            color: #ef6c00;
+        }
+
+        .low-risk {
+            background: #e8f5e8;
+            border: 1px solid var(--success-color);
+            color: #2e7d32;
+        }
+
+        .risk-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .result h3 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .result p {
+            margin: 10px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Hệ Thống Dự Đoán Tiểu Đường</h1>
+
+        <form id="predictionForm">
+            <div class="form-group">
+                <label>Số lần mang thai (Pregnancies):</label>
+                <input type="number" name="pregnancies" min="0" max="20" required>
+                <div class="input-hint">Nhập số lần mang thai (0-20)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Glucose (mg/dL):</label>
+                <input type="number" name="glucose" step="0.001" min="0" max="500" required>
+                <div class="input-hint">Nhập chỉ số glucose với tối đa 3 chữ số thập phân</div>
+            </div>
+
+            <div class="form-group">
+                <label>Huyết áp (mm Hg):</label>
+                <input type="number" name="blood_pressure" step="0.001" min="0" max="200" required>
+                <div class="input-hint">Nhập chỉ số huyết áp với tối đa 3 chữ số thập phân</div>
+            </div>
+
+            <div class="form-group">
+                <label>Độ dày da (mm):</label>
+                <input type="number" name="skin_thickness" step="0.001" min="0" max="100" required>
+                <div class="input-hint">Nhập độ dày da với tối đa 3 chữ số thập phân</div>
+            </div>
+
+            <div class="form-group">
+                <label>Insulin (mu U/ml):</label>
+                <input type="number" name="insulin" step="0.001" min="0" max="1000" required>
+                <div class="input-hint">Nhập chỉ số insulin với tối đa 3 chữ số thập phân</div>
+            </div>
+
+            <div class="form-group">
+                <label>BMI (Chỉ số khối cơ thể):</label>
+                <input type="number" name="bmi" step="0.001" min="0" max="100" required>
+                <div class="input-hint">Nhập chỉ số BMI với tối đa 3 chữ số thập phân</div>
+            </div>
+
+            <div class="form-group">
+                <label>Chức năng phả hệ tiểu đường:</label>
+                <input type="number" name="pedigree" step="0.001" min="0" max="2.5" required>
+                <div class="input-hint">Nhập giá trị với tối đa 3 chữ số thập phân (0-2.5)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Tuổi:</label>
+                <input type="number" name="age" min="1" max="120" required>
+                <div class="input-hint">Nhập tuổi (1-120)</div>
+            </div>
+
+            <button type="submit">Dự Đoán Nguy Cơ Tiểu Đường</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('result');
+
+            // Hiển thị loading
+            resultDiv.innerHTML = `
+                <div class="loading">
+                    <p>⏳ Đang xử lý dự đoán...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    let riskClass = '';
+                    let riskIcon = '';
+
+                    if (data.risk_level === 'HIGH') {
+                        riskClass = 'high-risk';
+                        riskIcon = '⚠️';
+                    } else if (data.risk_level === 'MEDIUM') {
+                        riskClass = 'medium-risk';
+                        riskIcon = '🔸';
+                    } else {
+                        riskClass = 'low-risk';
+                        riskIcon = '✅';
+                    }
+
+                    resultDiv.innerHTML = `
+                        <div class="result ${riskClass}">
+                            <h3><span class="risk-icon">${riskIcon}</span> Kết Quả Dự Đoán</h3>
+                            <p><strong>Chẩn đoán:</strong> ${data.diagnosis}</p>
+                            <p><strong>Xác suất:</strong> ${data.probability}</p>
+                            <p><strong>Mức độ nguy cơ:</strong> ${data.risk_level}</p>
+                            <p><strong>Khuyến nghị:</strong> ${data.recommendation}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result high-risk">
+                            <h3>❌ Lỗi</h3>
+                            <p>${data.error || 'Đã xảy ra lỗi khi xử lý dữ liệu'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result high-risk">
+                        <h3>❌ Lỗi Kết Nối</h3>
+                        <p>Không thể kết nối đến máy chủ. Vui lòng thử lại sau.</p>
+                        <p><small>Chi tiết: ${error.message}</small></p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

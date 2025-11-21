@@ -8,3 +8,4 @@ Steps để chạy annaconda
 Requirement:
 - pip install pandas numpy matplotlib seaborn scipy
 - pip install mlxtend
+- pip install pandas
