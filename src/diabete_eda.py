@@ -61,6 +61,16 @@ plt.title('HEATMAP TƯƠNG QUAN GIỮA CÁC BIẾN LÂM SÀNG')
 plt.tight_layout()
 plt.show()
 
+# Heatmap tương quan giữa các biến (không bao gồm Outcome)
+plt.figure(figsize=(10, 8))
+features_only = df.drop('Outcome', axis=1)
+corr_features = features_only.corr(numeric_only=True)
+
+sns.heatmap(corr_features, annot=True, cmap='coolwarm', center=0, fmt='.2f')
+plt.title('HEATMAP TƯƠNG QUAN GIỮA CÁC BIẾN LÂM SÀNG (KHÔNG BAO GỒM OUTCOME)')
+plt.tight_layout()
+plt.show()
+
 # Top features tương quan mạnh nhất
 plt.figure(figsize=(10, 6))
 top_features = corr_target.head(8)
@@ -68,6 +78,35 @@ sns.barplot(x=top_features.values, y=top_features.index, palette="viridis")
 plt.title('TOP BIẾN TƯƠNG QUAN MẠNH NHẤT VỚI BỆNH TIỂU ĐƯỜNG')
 plt.xlabel('Hệ số tương quan (Pearson)')
 plt.show()
+
+# Top các cặp biến có tương quan cao nhất (phiên bản đơn giản)
+print("\n=== TOP CÁC CẶP BIẾN CÓ TƯƠNG QUAN CAO NHẤT ===")
+
+features_only = df.drop('Outcome', axis=1)
+corr_features = features_only.corr(numeric_only=True)
+
+# Lấy các cặp tương quan
+corr_pairs = []
+for i in range(len(corr_features.columns)):
+    for j in range(i+1, len(corr_features.columns)):
+        corr_val = corr_features.iloc[i, j]
+        corr_pairs.append({
+            'Biến 1': corr_features.columns[i],
+            'Biến 2': corr_features.columns[j],
+            'Tương quan': corr_val,
+            'Mức độ': 'Rất cao' if abs(corr_val) > 0.7 else
+                     'Cao' if abs(corr_val) > 0.5 else
+                     'Trung bình' if abs(corr_val) > 0.3 else 'Thấp'
+        })
+
+corr_df = pd.DataFrame(corr_pairs)
+corr_df['Tương quan tuyệt đối'] = corr_df['Tương quan'].abs()
+top_pairs = corr_df.sort_values('Tương quan tuyệt đối', ascending=False).head(10)
+
+print("🔝 TOP 10 CẶP BIẾN CÓ TƯƠNG QUAN CAO NHẤT:")
+for idx, row in top_pairs.iterrows():
+    direction = "🟥 DƯƠNG" if row['Tương quan'] > 0 else "🟦 ÂM"
+    print(f"{direction} | {row['Biến 1']:20} vs {row['Biến 2']:20} : {row['Tương quan']:7.3f} ({row['Mức độ']})")
 
 # Phân bố các biến quan trọng theo Outcome
 important_features = ['Glucose', 'BMI', 'Age', 'DiabetesPedigreeFunction']

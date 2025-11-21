@@ -6,277 +6,644 @@
     <title>Diabetes Prediction App</title>
     <style>
         :root {
-            --primary-color: #007bff;
-            --success-color: #4caf50;
-            --warning-color: #ff9800;
-            --danger-color: #f44336;
-            --light-gray: #f8f9fa;
-            --border-color: #ddd;
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success-color: #16a34a;
+            --warning-color: #f59e0b;
+            --danger-color: #dc2626;
+            --light-gray: #f1f5f9;
+            --border-color: #d1d5db;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f7fa;
-            line-height: 1.6;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: radial-gradient(circle at top left, #e0f2fe, #eef2ff 40%, #e0f7fa 80%);
+            color: var(--text-main);
         }
 
         .container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 820px;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow:
+                0 20px 35px rgba(15, 23, 42, 0.1),
+                0 0 0 1px rgba(148, 163, 184, 0.22);
+            padding: 28px 26px 26px;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
         }
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2.2rem;
+        .container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), transparent);
+            pointer-events: none;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(12px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .icon-pill {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow:
+                0 10px 20px rgba(37, 99, 235, 0.25),
+                0 0 0 1px rgba(191, 219, 254, 0.8);
+        }
+
+        .title-group h1 {
+            margin: 0 0 4px;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        .title-group p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #ecfeff;
+            color: #0e7490;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 8px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #0e7490;
+        }
+
+        .form-section {
+            position: relative;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            padding: 18px 18px 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 18px;
+        }
+
+        .form-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-section-title span {
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px 18px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin: 0;
         }
 
         label {
-            display: block;
-            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: #34495e;
+            color: #1e293b;
+        }
+
+        .label-sub {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 11px;
+            border-radius: 9px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+            background-color: #ffffff;
+        }
+
+        input[type="number"]::placeholder {
+            color: #cbd5f5;
+        }
+
+        input[type="number"]:focus-visible {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow:
+                0 0 0 1px rgba(37, 99, 235, 0.18),
+                0 0 0 6px rgba(191, 219, 254, 0.7);
+        }
+
+        input[type="number"]:hover:not(:disabled) {
+            border-color: #9ca3af;
         }
 
         .input-hint {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            margin-top: 4px;
-            font-style: italic;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 3px;
         }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        .actions {
+            margin-top: 14px;
         }
 
         button {
-            background: var(--primary-color);
-            color: white;
-            padding: 14px 30px;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+            color: #ffffff;
+            padding: 13px 26px;
+            border-radius: 999px;
             border: none;
-            border-radius: 6px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             width: 100%;
-            transition: background-color 0.3s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow:
+                0 16px 28px rgba(37, 99, 235, 0.4),
+                0 0 0 1px rgba(191, 219, 254, 0.7);
+            transition: transform 0.18s ease, box-shadow 0.18s ease,
+                filter 0.18s ease, background-position 0.3s ease;
+            background-size: 140% 140%;
+        }
+
+        button span.icon {
+            font-size: 1.2rem;
         }
 
         button:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
+            filter: brightness(1.03);
+            background-position: 100% 0;
+            box-shadow:
+                0 22px 40px rgba(37, 99, 235, 0.55),
+                0 0 0 1px rgba(191, 219, 254, 0.9);
         }
 
         button:active {
             transform: translateY(0);
+            box-shadow:
+                0 10px 20px rgba(37, 99, 235, 0.35),
+                0 0 0 1px rgba(191, 219, 254, 0.9);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: default;
+            box-shadow: none;
+        }
+
+        .risk-legend {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .risk-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: #f8fafc;
+            border: 1px dashed #e2e8f0;
+        }
+
+        .risk-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+        }
+
+        .risk-dot.low {
+            background: var(--success-color);
+        }
+        .risk-dot.medium {
+            background: var(--warning-color);
+        }
+        .risk-dot.high {
+            background: var(--danger-color);
         }
 
         .result {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            margin-top: 20px;
+            padding: 18px 18px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            background: #f9fafb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.55;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
         }
 
         .high-risk {
-            background: #ffebee;
-            border: 1px solid var(--danger-color);
-            color: #c62828;
+            background: #fef2f2;
+            border-color: var(--danger-color);
+        }
+        .high-risk::before {
+            background: radial-gradient(circle at top left, #fee2e2, transparent 60%);
         }
 
         .medium-risk {
-            background: #fff3e0;
-            border: 1px solid var(--warning-color);
-            color: #ef6c00;
+            background: #fffbeb;
+            border-color: var(--warning-color);
+        }
+        .medium-risk::before {
+            background: radial-gradient(circle at top left, #fef3c7, transparent 60%);
         }
 
         .low-risk {
-            background: #e8f5e8;
-            border: 1px solid var(--success-color);
-            color: #2e7d32;
+            background: #ecfdf3;
+            border-color: var(--success-color);
+        }
+        .low-risk::before {
+            background: radial-gradient(circle at top left, #bbf7d0, transparent 60%);
         }
 
         .risk-icon {
-            font-size: 1.5rem;
-            margin-right: 10px;
-            vertical-align: middle;
+            font-size: 1.4rem;
+            margin-right: 8px;
         }
 
         .result h3 {
-            margin-top: 0;
+            margin: 0 0 6px;
             display: flex;
             align-items: center;
+            font-size: 1.1rem;
         }
 
         .result p {
-            margin: 10px 0;
+            margin: 4px 0;
+            font-size: 0.9rem;
+        }
+
+        .result p strong {
+            font-weight: 600;
         }
 
         .loading {
             text-align: center;
-            padding: 20px;
+            padding: 18px 6px 6px;
             color: var(--primary-color);
+            font-size: 0.95rem;
         }
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
+        .loading span.spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            border: 2px solid rgba(37, 99, 235, 0.35);
+            border-top-color: var(--primary-color);
+            margin-right: 6px;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
 
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 640px) {
             .container {
-                padding: 20px;
+                padding: 20px 16px 18px;
             }
 
-            h1 {
-                font-size: 1.8rem;
+            .header {
+                align-items: center;
+            }
+
+            .title-group h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.96rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Hệ Thống Dự Đoán Tiểu Đường</h1>
+        <div class="header">
+            <div class="icon-pill">🎯</div>
+            <div class="title-group">
+                <h1>Hệ Thống Dự Đoán Tiểu Đường</h1>
+                <p>Nhập các chỉ số sức khỏe để ước tính nguy cơ tiểu đường (mô hình minh họa, không thay cho chẩn đoán y khoa).</p>
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Mô hình máy học • Binary Classification
+                </div>
+            </div>
+        </div>
 
         <form id="predictionForm">
-            <div class="form-group">
-                <label>Số lần mang thai (Pregnancies):</label>
-                <input type="number" name="pregnancies" min="0" max="20" required>
-                <div class="input-hint">Nhập số lần mang thai (0-20)</div>
+            <div class="form-section">
+                <div class="form-section-title">
+                    <span>👩‍⚕️</span> Thông tin cơ bản
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>
+                            <span>Số lần mang thai</span>
+                            <span class="label-sub">Pregnancies</span>
+                        </label>
+                        <input type="number" name="pregnancies" min="0" max="20" required placeholder="0">
+                        <div class="input-hint">Nhập số lần mang thai (0–20)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Tuổi</span>
+                            <span class="label-sub">Năm tuổi</span>
+                        </label>
+                        <input type="number" name="age" min="1" max="120" required placeholder="Ví dụ: 45">
+                        <div class="input-hint">Nhập tuổi hiện tại (1–120)</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Glucose (mg/dL):</label>
-                <input type="number" name="glucose" step="0.001" min="0" max="500" required>
-                <div class="input-hint">Nhập chỉ số glucose với tối đa 3 chữ số thập phân</div>
+            <div class="form-section">
+                <div class="form-section-title">
+                    <span>🧪</span> Chỉ số xét nghiệm & đo lường
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>
+                            <span>Glucose</span>
+                            <span class="label-sub">mg/dL</span>
+                        </label>
+                        <input type="number" name="glucose" step="0.001" min="0" max="500" required placeholder="Ví dụ: 120">
+                        <div class="input-hint">Nhập chỉ số glucose, tối đa 3 chữ số thập phân</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Huyết áp</span>
+                            <span class="label-sub">mmHg</span>
+                        </label>
+                        <input type="number" name="blood_pressure" step="0.001" min="0" max="200" required placeholder="Ví dụ: 80">
+                        <div class="input-hint">Nhập huyết áp tâm trương (0–200 mmHg)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Độ dày da</span>
+                            <span class="label-sub">Skin thickness (mm)</span>
+                        </label>
+                        <input type="number" name="skin_thickness" step="0.001" min="0" max="100" required placeholder="Ví dụ: 20">
+                        <div class="input-hint">Nhập độ dày nếp gấp da (0–100 mm)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Insulin</span>
+                            <span class="label-sub">mu U/ml</span>
+                        </label>
+                        <input type="number" name="insulin" step="0.001" min="0" max="1000" required placeholder="Ví dụ: 80">
+                        <div class="input-hint">Nhập chỉ số insulin, tối đa 3 chữ số thập phân</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>BMI</span>
+                            <span class="label-sub">Chỉ số khối cơ thể</span>
+                        </label>
+                        <input type="number" name="bmi" step="0.001" min="0" max="100" required placeholder="Ví dụ: 27.3">
+                        <div class="input-hint">BMI = cân nặng (kg) / chiều cao² (m²)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Chức năng phả hệ tiểu đường</span>
+                            <span class="label-sub">Diabetes Pedigree Function</span>
+                        </label>
+                        <input type="number" name="pedigree" step="0.001" min="0" max="2.5" required placeholder="Ví dụ: 0.45">
+                        <div class="input-hint">Giá trị trong khoảng 0–2.5, tối đa 3 chữ số thập phân</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Huyết áp (mm Hg):</label>
-                <input type="number" name="blood_pressure" step="0.001" min="0" max="200" required>
-                <div class="input-hint">Nhập chỉ số huyết áp với tối đa 3 chữ số thập phân</div>
+            <div class="actions">
+                <button type="submit" id="submitBtn">
+                    <span class="icon">📊</span>
+                    <span>Dự Đoán Nguy Cơ Tiểu Đường</span>
+                </button>
+                <div class="risk-legend">
+                    <span>Thang mức nguy cơ:</span>
+                    <span class="risk-pill">
+                        <span class="risk-dot low"></span> Không tiểu đường (Xanh)
+                    </span>
+                    <span class="risk-pill">
+                        <span class="risk-dot medium"></span> Trung bình (Vàng)
+                    </span>
+                    <span class="risk-pill">
+                        <span class="risk-dot high"></span> Có tiểu đường (Đỏ)
+                    </span>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label>Độ dày da (mm):</label>
-                <input type="number" name="skin_thickness" step="0.001" min="0" max="100" required>
-                <div class="input-hint">Nhập độ dày da với tối đa 3 chữ số thập phân</div>
-            </div>
-
-            <div class="form-group">
-                <label>Insulin (mu U/ml):</label>
-                <input type="number" name="insulin" step="0.001" min="0" max="1000" required>
-                <div class="input-hint">Nhập chỉ số insulin với tối đa 3 chữ số thập phân</div>
-            </div>
-
-            <div class="form-group">
-                <label>BMI (Chỉ số khối cơ thể):</label>
-                <input type="number" name="bmi" step="0.001" min="0" max="100" required>
-                <div class="input-hint">Nhập chỉ số BMI với tối đa 3 chữ số thập phân</div>
-            </div>
-
-            <div class="form-group">
-                <label>Chức năng phả hệ tiểu đường:</label>
-                <input type="number" name="pedigree" step="0.001" min="0" max="2.5" required>
-                <div class="input-hint">Nhập giá trị với tối đa 3 chữ số thập phân (0-2.5)</div>
-            </div>
-
-            <div class="form-group">
-                <label>Tuổi:</label>
-                <input type="number" name="age" min="1" max="120" required>
-                <div class="input-hint">Nhập tuổi (1-120)</div>
-            </div>
-
-            <button type="submit">Dự Đoán Nguy Cơ Tiểu Đường</button>
         </form>
 
         <div id="result"></div>
     </div>
 
     <script>
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+        const form = document.getElementById('predictionForm');
+        const resultDiv = document.getElementById('result');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const formData = new FormData(this);
-            const resultDiv = document.getElementById('result');
 
-            // Hiển thị loading
+            // Hiển thị loading + disable nút
+            submitBtn.disabled = true;
             resultDiv.innerHTML = `
-                <div class="loading">
-                    <p>⏳ Đang xử lý dự đoán...</p>
+                <div class="result">
+                    <div class="loading">
+                        <span class="spinner"></span>
+                        <span>Đang xử lý dự đoán, vui lòng chờ...</span>
+                    </div>
                 </div>
             `;
 
             try {
-                const response = await fetch('/predict', {
-                    method: 'POST',
-                    body: formData
-                });
+                // Giả lập API call với dữ liệu mẫu
+                // Trong thực tế, bạn sẽ gửi request đến backend thực sự
+                const mockResponse = await mockAPICall(formData);
 
-                const data = await response.json();
+                submitBtn.disabled = false;
 
-                if (data.success) {
+                if (mockResponse.success) {
                     let riskClass = '';
                     let riskIcon = '';
+                    let riskText = '';
 
-                    if (data.risk_level === 'HIGH') {
+                    // Xác định màu sắc và biểu tượng dựa trên kết quả
+                    if (mockResponse.diagnosis === 'Có tiểu đường') {
                         riskClass = 'high-risk';
                         riskIcon = '⚠️';
-                    } else if (data.risk_level === 'MEDIUM') {
+                        riskText = 'Có tiểu đường';
+                    } else if (mockResponse.diagnosis === 'Nguy cơ trung bình') {
                         riskClass = 'medium-risk';
                         riskIcon = '🔸';
+                        riskText = 'Trung bình';
                     } else {
                         riskClass = 'low-risk';
                         riskIcon = '✅';
+                        riskText = 'Không tiểu đường';
                     }
 
                     resultDiv.innerHTML = `
                         <div class="result ${riskClass}">
                             <h3><span class="risk-icon">${riskIcon}</span> Kết Quả Dự Đoán</h3>
-                            <p><strong>Chẩn đoán:</strong> ${data.diagnosis}</p>
-                            <p><strong>Xác suất:</strong> ${data.probability}</p>
-                            <p><strong>Mức độ nguy cơ:</strong> ${data.risk_level}</p>
-                            <p><strong>Khuyến nghị:</strong> ${data.recommendation}</p>
+                            <p><strong>Chẩn đoán:</strong> ${mockResponse.diagnosis}</p>
+                            <p><strong>Xác suất:</strong> ${mockResponse.probability}</p>
+                            <p><strong>Mức độ nguy cơ:</strong> ${riskText}</p>
+                            <p><strong>Khuyến nghị:</strong> ${mockResponse.recommendation}</p>
+                            <p style="margin-top:8px;font-size:0.8rem;color:#6b7280;">
+                                ⚠️ Lưu ý: Công cụ này chỉ mang tính chất tham khảo, không thay thế tư vấn và chẩn đoán từ bác sĩ chuyên khoa.
+                            </p>
                         </div>
                     `;
                 } else {
                     resultDiv.innerHTML = `
                         <div class="result high-risk">
-                            <h3>❌ Lỗi</h3>
-                            <p>${data.error || 'Đã xảy ra lỗi khi xử lý dữ liệu'}</p>
+                            <h3><span class="risk-icon">❌</span>Lỗi</h3>
+                            <p>${mockResponse.error || 'Đã xảy ra lỗi khi xử lý dữ liệu.'}</p>
                         </div>
                     `;
                 }
             } catch (error) {
+                submitBtn.disabled = false;
                 resultDiv.innerHTML = `
                     <div class="result high-risk">
-                        <h3>❌ Lỗi Kết Nối</h3>
+                        <h3><span class="risk-icon">❌</span>Lỗi kết nối</h3>
                         <p>Không thể kết nối đến máy chủ. Vui lòng thử lại sau.</p>
-                        <p><small>Chi tiết: ${error.message}</small></p>
+                        <p style="font-size:0.8rem;color:#6b7280;"><strong>Chi tiết:</strong> ${error.message}</p>
                     </div>
                 `;
             }
         });
+
+        // Hàm giả lập API call
+        function mockAPICall(formData) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Lấy giá trị glucose để xác định kết quả
+                    const glucose = parseFloat(formData.get('glucose'));
+
+                    let diagnosis, probability, risk_level, recommendation;
+
+                    // Logic giả lập dựa trên glucose
+                    if (glucose < 100) {
+                        diagnosis = 'Không tiểu đường';
+                        probability = '15%';
+                        risk_level = 'LOW';
+                        recommendation = 'Chỉ số glucose bình thường. Duy trì chế độ ăn uống và tập luyện lành mạnh.';
+                    } else if (glucose >= 100 && glucose < 126) {
+                        diagnosis = 'Nguy cơ trung bình';
+                        probability = '45%';
+                        risk_level = 'MEDIUM';
+                        recommendation = 'Có dấu hiệu tiền tiểu đường. Nên tham khảo ý kiến bác sĩ và điều chỉnh lối sống.';
+                    } else {
+                        diagnosis = 'Có tiểu đường';
+                        probability = '85%';
+                        risk_level = 'HIGH';
+                        recommendation = 'Chỉ số glucose cao, có khả năng mắc tiểu đường. Cần thăm khám bác sĩ ngay.';
+                    }
+
+                    resolve({
+                        success: true,
+                        diagnosis,
+                        probability,
+                        risk_level,
+                        recommendation
+                    });
+                }, 1500);
+            });
+        }
     </script>
 </body>
 </html>
